@@ -1,4 +1,5 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.swabra
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
@@ -32,7 +33,7 @@ project {
 }
 
 object Build : BuildType({
-    name = "Build!"
+    name = "Build"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -49,5 +50,8 @@ object Build : BuildType({
     triggers {
         vcs {
         }
+    }
+    features {
+        swabra {  }
     }
 })
