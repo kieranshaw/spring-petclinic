@@ -29,7 +29,7 @@ version = "2019.2"
 
 project {
 
-    buildType(Build)
+    buildType(cleanFiles(Build))
 }
 
 object Build : BuildType({
@@ -51,7 +51,11 @@ object Build : BuildType({
         vcs {
         }
     }
-    features {
+})
+
+fun cleanFiles(buildType: BuildType) : BuildType {
+    buildType.features {
         swabra {  }
     }
-})
+    return buildType
+}
