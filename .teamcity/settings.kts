@@ -29,11 +29,15 @@ version = "2019.2"
 
 project {
     buildType(Build)
-    buildType(Test)
+    buildType(Test1)
+    buildType(Test2)
+    buildType(Deploy)
 }
 
+val Test1 = Test("Test1")
+val Test2 = Test("Test2")
+
 object Build : BuildType({
-    id("Build".toExtId())
     name = "Build"
 
     vcs {
@@ -49,29 +53,49 @@ object Build : BuildType({
 
 })
 
-object Test : BuildType({
-    id("Test".toExtId())
-    name = "Test"
+object Deploy : BuildType({
+    name = "Deploy"
 
     vcs {
         root(DslContext.settingsRoot)
     }
 
-    triggers {
-        vcs {
-            watchChangesInDependencies = true
-        }
-    }
-
     steps {
         maven {
-            goals = "clean integration-test -DskipTests"
+            goals = "clean compile"
             mavenVersion = defaultProvidedVersion()
         }
     }
 
     dependencies {
-        snapshot(Build) {}
+        snapshot(Test1) {}
+        snapshot(Test2) {}
     }
 
 })
+
+fun Test(buildName: String) : BuildType {
+    return BuildType {
+        name = buildName
+        vcs {
+            root(DslContext.settingsRoot)
+        }
+
+        triggers {
+            vcs {
+                watchChangesInDependencies = true
+            }
+        }
+
+        steps {
+            maven {
+                goals = "clean integration-test -DskipTests"
+                mavenVersion = defaultProvidedVersion()
+            }
+        }
+
+        dependencies {
+            snapshot(Build) {}
+        }
+    }
+}
