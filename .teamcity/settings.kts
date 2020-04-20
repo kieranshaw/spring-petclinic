@@ -1,8 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.v10.toExtId
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
-import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.swabra
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
-import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -28,17 +26,14 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2019.2"
 
-val operatingSystems = listOf("Mac OS X", "Windows 10", "Linux")
-
 project {
-    for (os in operatingSystems) {
-           buildType(Build(os))
-    }
+    buildType(Build)
+    buildType(Test)
 }
 
-class Build(val os: String) : BuildType({
-    id("Build_${os}".toExtId())
-    name = "Build ($os)"
+object Build : BuildType({
+    id("Build".toExtId())
+    name = "Build"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -51,7 +46,25 @@ class Build(val os: String) : BuildType({
         }
     }
 
-    requirements {
-        equals("teamcity.agent.jvm.os.name", os)
+})
+
+object Test : BuildType({
+    id("Test".toExtId())
+    name = "Test"
+
+    vcs {
+        root(DslContext.settingsRoot)
     }
+
+    steps {
+        maven {
+            goals = "clean integration-test -DskipTests"
+            mavenVersion = defaultProvidedVersion()
+        }
+    }
+
+    dependencies {
+        snapshot(Build) {}
+    }
+
 })
