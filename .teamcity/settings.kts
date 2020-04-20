@@ -29,19 +29,16 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 val operatingSystems = listOf("Mac OS X", "Windows 10", "Linux")
-val jdkVersions = listOf("JDK_18", "JDK_11")
 
 project {
     for (os in operatingSystems) {
-        for (jdk in jdkVersions) {
-            buildType(Build(os, jdk))
-        }
+           buildType(Build(os))
     }
 }
 
-class Build(val os: String, val jdk: String) : BuildType({
-    id("Build_${os}_${jdk}".toExtId())
-    name = "Build ($os, $jdk)"
+class Build(val os: String) : BuildType({
+    id("Build_${os}".toExtId())
+    name = "Build ($os)"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -51,7 +48,6 @@ class Build(val os: String, val jdk: String) : BuildType({
         maven {
             goals = "clean test"
             mavenVersion = defaultProvidedVersion()
-            jdkHome = "%env.${jdk}%"
         }
     }
 
