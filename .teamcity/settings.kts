@@ -28,7 +28,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2019.2"
 
-val operatingSystems = listOf("Mac OS X", "Windows", "Linux")
+val operatingSystems = listOf("Mac OS X", "Windows 10", "Linux")
 val jdkVersions = listOf("JDK_18", "JDK_11")
 
 project {
