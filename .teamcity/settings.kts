@@ -40,10 +40,6 @@ object Build : BuildType({
         root(DslContext.settingsRoot)
     }
 
-    triggers {
-        vcs {  }
-    }
-
     steps {
         maven {
             goals = "clean test"
@@ -59,6 +55,12 @@ object Test : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+            watchChangesInDependencies = true
+        }
     }
 
     steps {
