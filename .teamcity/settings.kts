@@ -29,7 +29,9 @@ version = "2019.2"
 
 project {
 
-    buildType(cleanFiles(Build))
+    buildType(wrapWithFeature(Build) {
+        swabra {}
+    })
 }
 
 object Build : BuildType({
@@ -53,9 +55,9 @@ object Build : BuildType({
     }
 })
 
-fun cleanFiles(buildType: BuildType) : BuildType {
+fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
     buildType.features {
-        swabra {  }
+        featureBlock()
     }
     return buildType
 }
