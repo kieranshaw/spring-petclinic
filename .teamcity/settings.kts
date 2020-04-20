@@ -1,3 +1,4 @@
+import jetbrains.buildServer.configs.kotlin.v10.toExtId
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.swabra
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
@@ -27,15 +28,20 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 
 version = "2019.2"
 
-project {
+val operatingSystems = listOf("Mac OS X", "Windows", "Linux")
+val jdkVersions = listOf("JDK_18", "JDK_11")
 
-    buildType(wrapWithFeature(Build) {
-        swabra {}
-    })
+project {
+    for (os in operatingSystems) {
+        for (jdk in jdkVersions) {
+            buildType(Build(os, jdk))
+        }
+    }
 }
 
-object Build : BuildType({
-    name = "Build"
+class Build(val os: String, val jdk: String) : BuildType({
+    id("Build_${os}_${jdk}".toExtId())
+    name = "Build ($os, $jdk)"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -44,20 +50,12 @@ object Build : BuildType({
     steps {
         maven {
             goals = "clean test"
-            runnerArgs = "-Dmaven.test.failure.ignore=true"
-            mavenVersion = bundled_3_5()
+            mavenVersion = defaultProvidedVersion()
+            jdkHome = "%env.${jdk}%"
         }
     }
 
-    triggers {
-        vcs {
-        }
+    requirements {
+        equals("teamcity.agent.jvm.os.name", os)
     }
 })
-
-fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
-    buildType.features {
-        featureBlock()
-    }
-    return buildType
-}
