@@ -2,6 +2,7 @@ package patches.templates
 
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.Template
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.v2019_2.ui.*
 
 /*
@@ -12,5 +13,13 @@ in the root project, and delete the patch script.
 create(DslContext.projectId, Template({
     id("TestJob")
     name = "TestJob"
+
+    steps {
+        script {
+            name = "Something"
+            id = "RUNNER_2"
+            scriptContent = """echo "hello""""
+        }
+    }
 }))
 
