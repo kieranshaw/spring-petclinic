@@ -37,6 +37,7 @@ project {
 
 object Build : BuildType({
     name = "Build"
+    artifactRules = "target/*.jar"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -48,9 +49,6 @@ object Build : BuildType({
             mavenVersion = defaultProvidedVersion()
         }
     }
-
-    publishArtifacts
-
 })
 
 object IntegrationTest : BuildType({
