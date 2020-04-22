@@ -48,6 +48,12 @@ object Build : BuildType({
             goals = "clean package"
             mavenVersion = defaultProvidedVersion()
         }
+        script {
+            scriptContent = """
+        dir
+        dir target
+    """.trimIndent()
+        }
     }
 })
 
