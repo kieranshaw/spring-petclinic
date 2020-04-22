@@ -29,11 +29,12 @@ version = "2019.2"
 
 project {
     buildType(Build)
-    buildType(Test)
+    buildType(IntegrationTest)
+    buildType(PerformanceTest)
+    buildType(Deploy)
 }
 
 object Build : BuildType({
-    id("Build".toExtId())
     name = "Build"
 
     vcs {
@@ -49,9 +50,8 @@ object Build : BuildType({
 
 })
 
-object Test : BuildType({
-    id("Test".toExtId())
-    name = "Test"
+object IntegrationTest : BuildType({
+    name = "Test - Integration"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -72,6 +72,59 @@ object Test : BuildType({
 
     dependencies {
         snapshot(Build) {}
+    }
+
+})
+
+object PerformanceTest : BuildType({
+    name = "Test - Performance"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+            watchChangesInDependencies = true
+        }
+    }
+
+    steps {
+        maven {
+            goals = "clean integration-test -DskipTests"
+            mavenVersion = defaultProvidedVersion()
+        }
+    }
+
+    dependencies {
+        snapshot(Build) {}
+    }
+
+})
+
+object Deploy : BuildType({
+    name = "Deploy - Dev"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+            watchChangesInDependencies = true
+        }
+    }
+
+    steps {
+        maven {
+            goals = "clean compile"
+            mavenVersion = defaultProvidedVersion()
+        }
+    }
+
+    dependencies {
+        snapshot(IntegrationTest) {}
+        snapshot(PerformanceTest) {}
     }
 
 })
