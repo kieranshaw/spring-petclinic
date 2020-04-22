@@ -1,5 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.v10.toExtId
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.vcsLabeling
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.script
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
@@ -38,6 +39,7 @@ project {
 object Build : BuildType({
     name = "Build"
     artifactRules = "target/*.jar"
+    buildNumberPattern = "1.%build.counter%.0"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -48,11 +50,13 @@ object Build : BuildType({
             goals = "clean package"
             mavenVersion = defaultProvidedVersion()
         }
-        script {
-            scriptContent = """
-        dir
-        dir target
-    """.trimIndent()
+    }
+
+    features {
+        vcsLabeling {
+            vcsRootId = "__ALL__"
+            labelingPattern = "build/%system.build.number%"
+            branchFilter = ""
         }
     }
 })
