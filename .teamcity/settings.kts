@@ -47,6 +47,10 @@ object Build : BuildType({
 
     steps {
         maven {
+            goals = "versions:set versions:commit -DnewVersion=%system.build.number%"
+            mavenVersion = defaultProvidedVersion()
+        }
+        maven {
             goals = "clean package"
             mavenVersion = defaultProvidedVersion()
         }
