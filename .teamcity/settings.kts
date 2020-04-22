@@ -43,10 +43,12 @@ object Build : BuildType({
 
     steps {
         maven {
-            goals = "clean test"
+            goals = "clean package"
             mavenVersion = defaultProvidedVersion()
         }
     }
+
+    publishArtifacts
 
 })
 
@@ -91,7 +93,7 @@ object PerformanceTest : BuildType({
 
     steps {
         maven {
-            goals = "clean integration-test -DskipTests"
+            goals = "clean test"
             mavenVersion = defaultProvidedVersion()
         }
     }
@@ -117,12 +119,16 @@ object Deploy : BuildType({
 
     steps {
         maven {
-            goals = "clean compile"
+            goals = "clean package"
             mavenVersion = defaultProvidedVersion()
         }
     }
 
     dependencies {
+        artifacts(Build) {
+            buildRule = sameChainOrLastFinished()
+            artifactRules = "**/*.jar"
+        }
         snapshot(IntegrationTest) {}
         snapshot(PerformanceTest) {}
     }
