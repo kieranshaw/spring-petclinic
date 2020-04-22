@@ -28,10 +28,11 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 project {
+
     buildType(Build)
     buildType(Test1)
     buildType(Test2)
-    buildType(Deploy)
+    //buildType(Deploy)
 }
 
 val Test1 = Test("Test1")
@@ -53,26 +54,26 @@ object Build : BuildType({
 
 })
 
-object Deploy : BuildType({
-    name = "Deploy"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    steps {
-        maven {
-            goals = "clean compile"
-            mavenVersion = defaultProvidedVersion()
-        }
-    }
-
-    dependencies {
-        snapshot(Test1) {}
-        snapshot(Test2) {}
-    }
-
-})
+//object Deploy : BuildType({
+//    name = "Deploy"
+//
+//    vcs {
+//        root(DslContext.settingsRoot)
+//    }
+//
+//    steps {
+//        maven {
+//            goals = "clean compile"
+//            mavenVersion = defaultProvidedVersion()
+//        }
+//    }
+//
+//    dependencies {
+//        snapshot(Test1) {}
+//        snapshot(Test2) {}
+//    }
+//
+//})
 
 fun Test(buildName: String) : BuildType {
     return BuildType {
