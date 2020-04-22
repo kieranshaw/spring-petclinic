@@ -28,17 +28,12 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 project {
-
     buildType(Build)
-    buildType(Test1)
-    buildType(Test2)
-    //buildType(Deploy)
+    buildType(Test)
 }
 
-val Test1 = Test("Test1")
-val Test2 = Test("Test2")
-
 object Build : BuildType({
+    id("Build".toExtId())
     name = "Build"
 
     vcs {
@@ -54,49 +49,29 @@ object Build : BuildType({
 
 })
 
-//object Deploy : BuildType({
-//    name = "Deploy"
-//
-//    vcs {
-//        root(DslContext.settingsRoot)
-//    }
-//
-//    steps {
-//        maven {
-//            goals = "clean compile"
-//            mavenVersion = defaultProvidedVersion()
-//        }
-//    }
-//
-//    dependencies {
-//        snapshot(Test1) {}
-//        snapshot(Test2) {}
-//    }
-//
-//})
+object Test : BuildType({
+    id("Test".toExtId())
+    name = "Test"
 
-fun Test(buildName: String) : BuildType {
-    return BuildType {
-        name = buildName
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
         vcs {
-            root(DslContext.settingsRoot)
-        }
-
-        triggers {
-            vcs {
-                watchChangesInDependencies = true
-            }
-        }
-
-        steps {
-            maven {
-                goals = "clean integration-test -DskipTests"
-                mavenVersion = defaultProvidedVersion()
-            }
-        }
-
-        dependencies {
-            snapshot(Build) {}
+            watchChangesInDependencies = true
         }
     }
-}
+
+    steps {
+        maven {
+            goals = "clean integration-test -DskipTests"
+            mavenVersion = defaultProvidedVersion()
+        }
+    }
+
+    dependencies {
+        snapshot(Build) {}
+    }
+
+})
