@@ -46,12 +46,7 @@ object Build : BuildType({
 
     steps {
         maven {
-            goals = "versions:set versions:commit -DnewVersion=%system.build.number%"
-            mavenVersion = defaultProvidedVersion()
-        }
-        maven {
             goals = "clean package"
-            mavenVersion = defaultProvidedVersion()
         }
     }
 
@@ -75,7 +70,6 @@ object IntegrationTest : BuildType({
     steps {
         maven {
             goals = "clean integration-test -DskipTests"
-            mavenVersion = defaultProvidedVersion()
         }
     }
 
@@ -96,7 +90,6 @@ object PerformanceTest : BuildType({
     steps {
         maven {
             goals = "clean test"
-            mavenVersion = defaultProvidedVersion()
         }
     }
 
