@@ -70,7 +70,7 @@ object IntegrationTest : BuildType({
 
     steps {
         maven {
-            goals = "clean integration-test -DskipTests"
+            goals = "clean test-compile failsafe:integration-test"
         }
     }
 
