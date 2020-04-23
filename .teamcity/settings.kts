@@ -102,6 +102,7 @@ object PerformanceTest : BuildType({
 object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+    type = Type.DEPLOYMENT
     artifactRules = "*.jar"
 
     vcs {
@@ -135,11 +136,6 @@ object DeployDev : BuildType({
             labelingPattern = "deploy/dev/%system.build.number%"
             branchFilter = ""
         }
-        vcsLabeling {
-            vcsRootId = "__ALL__"
-            labelingPattern = "deploy/dev/latest"
-            branchFilter = ""
-        }
     }
 
 })
@@ -147,6 +143,8 @@ object DeployDev : BuildType({
 object DeployTest : BuildType({
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+    type = Type.DEPLOYMENT
+
 
     vcs {
         root(DslContext.settingsRoot)
@@ -170,11 +168,6 @@ object DeployTest : BuildType({
         vcsLabeling {
             vcsRootId = "__ALL__"
             labelingPattern = "deploy/test/%system.build.number%"
-            branchFilter = ""
-        }
-        vcsLabeling {
-            vcsRootId = "__ALL__"
-            labelingPattern = "deploy/test/latest"
             branchFilter = ""
         }
     }
