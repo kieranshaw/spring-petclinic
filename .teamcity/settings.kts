@@ -33,6 +33,7 @@ project {
     buildType(IntegrationTest)
     buildType(PerformanceTest)
     buildType(DeployDev)
+    buildType(AcceptanceTestDev)
     buildType(DeployTest)
 }
 
@@ -109,12 +110,6 @@ object DeployDev : BuildType({
         root(DslContext.settingsRoot)
     }
 
-    triggers {
-        vcs {
-            watchChangesInDependencies = true
-        }
-    }
-
     steps {
         script {
             scriptContent = "dir"
@@ -140,10 +135,42 @@ object DeployDev : BuildType({
 
 })
 
+object AcceptanceTestDev : BuildType({
+    name = "Acceptance Test - Dev"
+    buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+    artifactRules = "*.jar"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+            watchChangesInDependencies = true
+        }
+    }
+
+    steps {
+        maven {
+            goals = "clean test"
+        }
+    }
+
+    dependencies {
+        snapshot(DeployDev) {}
+        artifacts(DeployDev) {
+            buildRule = sameChainOrLastFinished()
+            artifactRules = "*.jar"
+        }
+    }
+
+})
+
 object DeployTest : BuildType({
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
     type = Type.DEPLOYMENT
+    artifactRules = "*.jar"
 
 
     vcs {
