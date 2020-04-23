@@ -9,9 +9,6 @@ To apply the patch, change the buildType with id = 'Build'
 accordingly, and delete the patch script.
 */
 changeBuildType(RelativeId("Build")) {
-    expectTemplates()
-    templates = arrayListOf(AbsoluteId("Build"))
-
     check(artifactRules == "target/*.jar") {
         "Unexpected option value: artifactRules = $artifactRules"
     }
