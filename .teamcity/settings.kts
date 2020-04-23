@@ -32,6 +32,7 @@ project {
     buildType(Build)
     buildType(IntegrationTest)
     buildType(PerformanceTest)
+    buildType(AggregatedTests)
     buildType(DeployDev)
     buildType(AcceptanceTestDev)
     buildType(DeployTest)
