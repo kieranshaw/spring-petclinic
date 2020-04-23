@@ -129,6 +129,19 @@ object DeployDev : BuildType({
         snapshot(PerformanceTest) {}
     }
 
+    features {
+        vcsLabeling {
+            vcsRootId = "__ALL__"
+            labelingPattern = "deploy/dev/%system.build.number%"
+            branchFilter = ""
+        }
+        vcsLabeling {
+            vcsRootId = "__ALL__"
+            labelingPattern = "deploy/dev/latest"
+            branchFilter = ""
+        }
+    }
+
 })
 
 object DeployTest : BuildType({
@@ -151,6 +164,19 @@ object DeployTest : BuildType({
             artifactRules = "*.jar"
         }
         snapshot(DeployDev) {}
+    }
+
+    features {
+        vcsLabeling {
+            vcsRootId = "__ALL__"
+            labelingPattern = "deploy/test/%system.build.number%"
+            branchFilter = ""
+        }
+        vcsLabeling {
+            vcsRootId = "__ALL__"
+            labelingPattern = "deploy/test/latest"
+            branchFilter = ""
+        }
     }
 
 })
