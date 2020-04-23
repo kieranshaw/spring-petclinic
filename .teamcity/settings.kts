@@ -144,6 +144,7 @@ object AcceptanceTestDev : BuildType({
 
     triggers {
         vcs {
+            branchFilter = "+:master"
             watchChangesInDependencies = true
         }
     }
