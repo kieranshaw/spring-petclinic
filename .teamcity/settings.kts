@@ -104,7 +104,6 @@ object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
     type = Type.DEPLOYMENT
-    artifactRules = "*.jar"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -138,7 +137,6 @@ object DeployDev : BuildType({
 object AcceptanceTestDev : BuildType({
     name = "Acceptance Test - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
-    artifactRules = "*.jar"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -158,10 +156,6 @@ object AcceptanceTestDev : BuildType({
 
     dependencies {
         snapshot(DeployDev) {}
-        artifacts(DeployDev) {
-            buildRule = sameChainOrLastFinished()
-            artifactRules = "*.jar"
-        }
     }
 
 })
@@ -170,8 +164,6 @@ object DeployTest : BuildType({
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
     type = Type.DEPLOYMENT
-    artifactRules = "*.jar"
-
 
     vcs {
         root(DslContext.settingsRoot)
@@ -184,11 +176,11 @@ object DeployTest : BuildType({
     }
 
     dependencies {
-        artifacts(DeployDev) {
+        artifacts(Build) {
             buildRule = sameChainOrLastFinished()
-            artifactRules = "*.jar"
+            artifactRules = "**/*.jar"
         }
-        snapshot(DeployDev) {}
+        snapshot(AcceptanceTestDev) {}
     }
 
     features {
