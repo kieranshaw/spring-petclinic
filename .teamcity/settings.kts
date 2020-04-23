@@ -73,12 +73,6 @@ object IntegrationTest : BuildType({
         root(DslContext.settingsRoot)
     }
 
-    triggers {
-        vcs {
-            watchChangesInDependencies = true
-        }
-    }
-
     steps {
         maven {
             goals = "clean integration-test -DskipTests"
@@ -98,12 +92,6 @@ object PerformanceTest : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-    }
-
-    triggers {
-        vcs {
-            watchChangesInDependencies = true
-        }
     }
 
     steps {
