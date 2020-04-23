@@ -100,6 +100,22 @@ object PerformanceTest : BuildType({
 
 })
 
+object AggregatedTests : BuildType({
+    name = "Test - Aggregated"
+    buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+    type = Type.COMPOSITE
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    dependencies {
+        snapshot(IntegrationTest) {}
+        snapshot(PerformanceTest) {}
+    }
+
+})
+
 object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
@@ -120,8 +136,7 @@ object DeployDev : BuildType({
             buildRule = sameChainOrLastFinished()
             artifactRules = "**/*.jar"
         }
-        snapshot(IntegrationTest) {}
-        snapshot(PerformanceTest) {}
+        snapshot(AggregatedTests) {}
     }
 
     features {
