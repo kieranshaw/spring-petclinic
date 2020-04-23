@@ -67,6 +67,7 @@ object Build : BuildType({
 
 object IntegrationTest : BuildType({
     name = "Test - Integration"
+    buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -93,6 +94,7 @@ object IntegrationTest : BuildType({
 
 object PerformanceTest : BuildType({
     name = "Test - Performance"
+    buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -119,6 +121,7 @@ object PerformanceTest : BuildType({
 
 object Deploy : BuildType({
     name = "Deploy - Dev"
+    buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
     vcs {
         root(DslContext.settingsRoot)
