@@ -37,9 +37,8 @@ project {
 }
 
 object Build : BuildType({
+    templates(AbsoluteId("MavenBuild"))
     name = "Build"
-    artifactRules = "target/*.jar"
-    buildNumberPattern = "1.%build.counter%.0"
 
     vcs {
         root(DslContext.settingsRoot)
