@@ -1,4 +1,3 @@
-import jetbrains.buildServer.configs.kotlin.v10.toExtId
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.vcsLabeling
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.maven
@@ -33,7 +32,8 @@ project {
     buildType(Build)
     buildType(IntegrationTest)
     buildType(PerformanceTest)
-    buildType(Deploy)
+    buildType(DeployDev)
+    buildType(DeployTest)
 }
 
 object Build : BuildType({
@@ -99,9 +99,10 @@ object PerformanceTest : BuildType({
 
 })
 
-object Deploy : BuildType({
+object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+    artifactRules = "*.jar"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -126,6 +127,30 @@ object Deploy : BuildType({
         }
         snapshot(IntegrationTest) {}
         snapshot(PerformanceTest) {}
+    }
+
+})
+
+object DeployTest : BuildType({
+    name = "Deploy - Test"
+    buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
+        script {
+            scriptContent = "dir"
+        }
+    }
+
+    dependencies {
+        artifacts(DeployDev) {
+            buildRule = sameChainOrLastFinished()
+            artifactRules = "*.jar"
+        }
+        snapshot(DeployDev) {}
     }
 
 })
