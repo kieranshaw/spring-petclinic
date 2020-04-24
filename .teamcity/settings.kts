@@ -75,6 +75,9 @@ object Build : BuildType({
         maven {
             goals = "clean package"
         }
+        script {
+            scriptContent = "echo ##teamcity[jacocoReport dataPath='target/jacoco.exec']"
+        }
     }
 
     features {
