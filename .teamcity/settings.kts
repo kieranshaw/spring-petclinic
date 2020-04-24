@@ -76,7 +76,7 @@ object Build : BuildType({
             goals = "clean package"
         }
         script {
-            scriptContent = "echo ##teamcity[jacocoReport dataPath='target/jacoco.exec']"
+            scriptContent = "echo ##teamcity[jacocoReport dataPath='target/jacoco.exec' includes='org.springframework.samples.petclinic.*']"
         }
     }
 
