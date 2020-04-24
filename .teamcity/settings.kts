@@ -69,6 +69,7 @@ object Build : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     steps {
@@ -95,6 +96,7 @@ object IntegrationTest : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     steps {
@@ -115,6 +117,7 @@ object PerformanceTest : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     steps {
@@ -136,6 +139,7 @@ object AggregatedTests : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     dependencies {
@@ -152,6 +156,7 @@ object DeployDev : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     steps {
@@ -212,6 +217,7 @@ object DeployTest : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     steps {
