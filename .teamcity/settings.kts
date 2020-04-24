@@ -45,7 +45,7 @@ object FeaturesBuild : BuildType({
     vcs {
         root(DslContext.settingsRoot)
         branchFilter = """
-                    -:master
+                    -:<default>
                     +:JIRA-*
                 """.trimIndent()
     }
@@ -69,7 +69,7 @@ object Build : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-        branchFilter = "+:master"
+        branchFilter = "+:<default>"
     }
 
     steps {
@@ -96,7 +96,7 @@ object IntegrationTest : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-        branchFilter = "+:master"
+        branchFilter = "+:<default>"
     }
 
     steps {
@@ -117,7 +117,7 @@ object PerformanceTest : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-        branchFilter = "+:master"
+        branchFilter = "+:<default>"
     }
 
     steps {
@@ -139,7 +139,7 @@ object AggregatedTests : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-        branchFilter = "+:master"
+        branchFilter = "+:<default>"
     }
 
     dependencies {
@@ -156,7 +156,7 @@ object DeployDev : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-        branchFilter = "+:master"
+        branchFilter = "+:<default>"
     }
 
     steps {
@@ -189,7 +189,7 @@ object AcceptanceTestDev : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-        branchFilter = "+:master"
+        branchFilter = "+:<default>"
     }
 
     triggers {
@@ -217,7 +217,7 @@ object DeployTest : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
-        branchFilter = "+:master"
+        branchFilter = "+:<default>"
     }
 
     steps {
