@@ -29,17 +29,43 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 project {
+    buildType(FeaturesBuild)
     buildType(Build)
     buildType(IntegrationTest)
     buildType(PerformanceTest)
+    buildType(AggregatedTests)
     buildType(DeployDev)
     buildType(AcceptanceTestDev)
     buildType(DeployTest)
 }
 
+object FeaturesBuild : BuildType({
+    name = "Build - Features"
+
+    vcs {
+        root(DslContext.settingsRoot)
+        branchFilter = """
+                    -:master
+                    +:JIRA-*
+                """.trimIndent()
+    }
+
+    triggers {
+        vcs {
+        }
+    }
+
+    steps {
+        maven {
+            goals = "clean package"
+        }
+    }
+
+})
+
 object Build : BuildType({
     templates(AbsoluteId("MavenBuild"))
-    name = "Build"
+    name = "Build - Master"
 
     vcs {
         root(DslContext.settingsRoot)
@@ -70,7 +96,7 @@ object IntegrationTest : BuildType({
 
     steps {
         maven {
-            goals = "clean integration-test -DskipTests"
+            goals = "clean test-compile failsafe:integration-test"
         }
     }
 
@@ -100,6 +126,22 @@ object PerformanceTest : BuildType({
 
 })
 
+object AggregatedTests : BuildType({
+    name = "Test - Aggregated"
+    buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+    type = Type.COMPOSITE
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    dependencies {
+        snapshot(IntegrationTest) {}
+        snapshot(PerformanceTest) {}
+    }
+
+})
+
 object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
@@ -120,8 +162,7 @@ object DeployDev : BuildType({
             buildRule = sameChainOrLastFinished()
             artifactRules = "**/*.jar"
         }
-        snapshot(IntegrationTest) {}
-        snapshot(PerformanceTest) {}
+        snapshot(AggregatedTests) {}
     }
 
     features {
@@ -140,11 +181,11 @@ object AcceptanceTestDev : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     triggers {
         vcs {
-            branchFilter = "+:master"
             watchChangesInDependencies = true
         }
     }
