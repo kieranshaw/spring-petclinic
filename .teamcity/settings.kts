@@ -71,6 +71,15 @@ object Build : BuildType({
         root(DslContext.settingsRoot)
     }
 
+    triggers {
+        vcs {
+            branchFilter = """
+                    -:master
+                    +:JIRA-*
+                """.trimIndent()
+        }
+    }
+
     steps {
         maven {
             goals = "clean package"
