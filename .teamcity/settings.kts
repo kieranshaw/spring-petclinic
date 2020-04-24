@@ -44,14 +44,14 @@ object FeaturesBuild : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = """
+                    -:<default>
+                    +:ref/heads/feature/JIRA-*
+                """.trimIndent()
     }
 
     triggers {
         vcs {
-            branchFilter = """
-                    -:<default>
-                    +:ref/heads/feature/JIRA-*
-                """.trimIndent()
         }
     }
 
@@ -65,7 +65,7 @@ object FeaturesBuild : BuildType({
 
 object Build : BuildType({
     templates(AbsoluteId("MavenBuild"))
-    name = "Build"
+    name = "Build - Master"
 
     vcs {
         root(DslContext.settingsRoot)
