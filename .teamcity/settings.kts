@@ -29,6 +29,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 project {
+    buildType(FeaturesBuild)
     buildType(Build)
     buildType(IntegrationTest)
     buildType(PerformanceTest)
@@ -37,6 +38,30 @@ project {
     buildType(AcceptanceTestDev)
     buildType(DeployTest)
 }
+
+object FeaturesBuild : BuildType({
+    name = "Build - Features"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    triggers {
+        vcs {
+            branchFilter = """
+                    -:<default>
+                    +:features/*
+                """.trimIndent()
+        }
+    }
+
+    steps {
+        maven {
+            goals = "clean package"
+        }
+    }
+
+})
 
 object Build : BuildType({
     templates(AbsoluteId("MavenBuild"))
