@@ -181,11 +181,11 @@ object AcceptanceTestDev : BuildType({
 
     vcs {
         root(DslContext.settingsRoot)
+        branchFilter = "+:master"
     }
 
     triggers {
         vcs {
-            branchFilter = "+:<default>"
             watchChangesInDependencies = true
         }
     }
