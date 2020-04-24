@@ -46,7 +46,7 @@ object FeaturesBuild : BuildType({
         root(DslContext.settingsRoot)
         branchFilter = """
                     -:<default>
-                    +:feature/JIRA-*
+                    +:ref/heads/feature/(JIRA-*)
                 """.trimIndent()
     }
 
