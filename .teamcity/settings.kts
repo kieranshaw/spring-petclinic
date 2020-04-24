@@ -50,7 +50,7 @@ object FeaturesBuild : BuildType({
         vcs {
             branchFilter = """
                     -:<default>
-                    +:features/*
+                    +:ref/heads/feature/JIRA-*
                 """.trimIndent()
         }
     }
