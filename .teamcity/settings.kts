@@ -166,6 +166,12 @@ object DeployDev : BuildType({
         snapshot(AggregatedTests) {}
     }
 
+    features {
+        vcsLabeling {
+            vcsRootId = "__ALL__"
+        }
+    }
+
 })
 
 object AcceptanceTestDev : BuildType({
