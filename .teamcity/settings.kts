@@ -154,6 +154,11 @@ object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
+    vcs {
+        root(DslContext.settingsRoot)
+        branchFilter = "+:<default>"
+    }
+
     params {
         param("deploy.environment.name", "dev")
     }
@@ -207,6 +212,11 @@ object DeployTest : BuildType({
     templates(AbsoluteId("DeployBuild"))
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+
+    vcs {
+        root(DslContext.settingsRoot)
+        branchFilter = "+:<default>"
+    }
 
     params {
         param("deploy.environment.name", "test")
