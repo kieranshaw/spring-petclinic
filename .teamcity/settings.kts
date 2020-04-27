@@ -233,20 +233,3 @@ object DeployTest : BuildType({
     }
 
 })
-
-fun cleanFiles(buildType: BuildType): BuildType {
-    if (buildType.features.items.find { it.type == "swabra" } == null) {
-        buildType.features {
-            swabra {
-            }
-        }
-    }
-    return buildType
-}
-
-fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
-    buildType.features {
-        featureBlock()
-    }
-    return buildType
-}
