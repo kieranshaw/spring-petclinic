@@ -171,14 +171,6 @@ object DeployDev : BuildType({
         snapshot(AggregatedTests) {}
     }
 
-    features {
-        vcsLabeling {
-            vcsRootId = "__ALL__"
-            labelingPattern = "deploy/%deploy.environment.name%/%system.build.number%"
-            branchFilter = ""
-        }
-    }
-
 })
 
 object AcceptanceTestDev : BuildType({
