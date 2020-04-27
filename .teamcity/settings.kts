@@ -200,21 +200,9 @@ object AcceptanceTestDev : BuildType({
 })
 
 object DeployTest : BuildType({
+    templates(AbsoluteId("DeployBuild"))
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
-
-    type = Type.DEPLOYMENT
-
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
-
-    steps {
-        script {
-            scriptContent = "dir"
-        }
-    }
 
     dependencies {
         artifacts(Build) {
