@@ -43,7 +43,7 @@ project {
         buildType(DeployTest)
     }
 
-    masterBuildChain.buildTypes().forEach { buildType(it) }
+    masterBuildChain.buildTypes().forEach { buildType(masterOnly(it)) }
 }
 
 object FeaturesBuild : BuildType({
@@ -74,11 +74,6 @@ object Build : BuildType({
     templates(AbsoluteId("MavenBuild"))
     name = "Build - Master"
 
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
-
     steps {
         maven {
             goals = "clean package"
@@ -101,11 +96,6 @@ object IntegrationTest : BuildType({
     name = "Test - Integration"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
-
     steps {
         maven {
             goals = "clean test-compile failsafe:integration-test"
@@ -116,11 +106,6 @@ object IntegrationTest : BuildType({
 object PerformanceTest : BuildType({
     name = "Test - Performance"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
-
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
 
     steps {
         maven {
@@ -145,11 +130,6 @@ object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
-
     params {
         param("deploy.environment.name", "dev")
     }
@@ -165,11 +145,6 @@ object DeployDev : BuildType({
 object AcceptanceTestDev : BuildType({
     name = "Acceptance Test - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
-
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
 
     triggers {
         vcs {
@@ -189,11 +164,6 @@ object DeployTest : BuildType({
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
-
     params {
         param("deploy.environment.name", "test")
     }
@@ -205,3 +175,12 @@ object DeployTest : BuildType({
         }
     }
 })
+
+
+fun masterOnly(buildType: BuildType): BuildType {
+    buildType.vcs {
+        root(DslContext.settingsRoot)
+        branchFilter = "+:<default>"
+    }
+    return buildType
+}
