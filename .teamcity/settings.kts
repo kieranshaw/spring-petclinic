@@ -169,6 +169,8 @@ object DeployDev : BuildType({
     features {
         vcsLabeling {
             vcsRootId = "__ALL__"
+            labelingPattern = "deploy/%deploy.environment.name%/%system.build.number%"
+            branchFilter = ""
         }
     }
 
@@ -216,6 +218,14 @@ object DeployTest : BuildType({
             artifactRules = "**/*.jar"
         }
         snapshot(AcceptanceTestDev) {}
+    }
+
+    features {
+        vcsLabeling {
+            vcsRootId = "__ALL__"
+            labelingPattern = "deploy/%deploy.environment.name%/%system.build.number%"
+            branchFilter = ""
+        }
     }
 
 })
