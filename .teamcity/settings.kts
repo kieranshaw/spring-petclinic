@@ -150,20 +150,9 @@ object AggregatedTests : BuildType({
 })
 
 object DeployDev : BuildType({
+    templates(AbsoluteId("DeployBuild"))
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
-    type = Type.DEPLOYMENT
-
-    vcs {
-        root(DslContext.settingsRoot)
-        branchFilter = "+:<default>"
-    }
-
-    steps {
-        script {
-            scriptContent = "dir"
-        }
-    }
 
     dependencies {
         artifacts(Build) {
@@ -213,6 +202,7 @@ object AcceptanceTestDev : BuildType({
 object DeployTest : BuildType({
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
+
     type = Type.DEPLOYMENT
 
     vcs {
@@ -243,3 +233,20 @@ object DeployTest : BuildType({
     }
 
 })
+
+fun cleanFiles(buildType: BuildType): BuildType {
+    if (buildType.features.items.find { it.type == "swabra" } == null) {
+        buildType.features {
+            swabra {
+            }
+        }
+    }
+    return buildType
+}
+
+fun wrapWithFeature(buildType: BuildType, featureBlock: BuildFeatures.() -> Unit): BuildType {
+    buildType.features {
+        featureBlock()
+    }
+    return buildType
+}
