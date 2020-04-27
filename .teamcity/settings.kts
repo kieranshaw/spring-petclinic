@@ -154,20 +154,16 @@ object DeployDev : BuildType({
     name = "Deploy - Dev"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
+    params {
+        param("deploy.environment.name", "dev")
+    }
+
     dependencies {
         artifacts(Build) {
             buildRule = sameChainOrLastFinished()
             artifactRules = "**/*.jar"
         }
         snapshot(AggregatedTests) {}
-    }
-
-    features {
-        vcsLabeling {
-            vcsRootId = "__ALL__"
-            labelingPattern = "deploy/dev/%system.build.number%"
-            branchFilter = ""
-        }
     }
 
 })
@@ -204,20 +200,16 @@ object DeployTest : BuildType({
     name = "Deploy - Test"
     buildNumberPattern = "${Build.depParamRefs["system.build.number"]}"
 
+    params {
+        param("deploy.environment.name", "test")
+    }
+
     dependencies {
         artifacts(Build) {
             buildRule = sameChainOrLastFinished()
             artifactRules = "**/*.jar"
         }
         snapshot(AcceptanceTestDev) {}
-    }
-
-    features {
-        vcsLabeling {
-            vcsRootId = "__ALL__"
-            labelingPattern = "deploy/test/%system.build.number%"
-            branchFilter = ""
-        }
     }
 
 })
